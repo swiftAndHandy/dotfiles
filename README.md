@@ -47,8 +47,16 @@ export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-Add to `~/.zshrc`:
+## Raspberry Pi Pico
+
+The `.zshrc` includes `PICO_SDK_PATH` pointing to `~/pico/pico-sdk`. To set up the SDK:
+
 ```bash
-export PATH="$HOME/.cargo/bin:$PATH"
+brew install cmake gcc-arm-embedded
+mkdir ~/pico && cd ~/pico
+git clone https://github.com/raspberrypi/pico-sdk.git
+cd pico-sdk && git submodule update --init
 ```
+
+If you don't need Pico support, remove the `PICO_SDK_PATH` export from `.zshrc` and skip the above.
 
