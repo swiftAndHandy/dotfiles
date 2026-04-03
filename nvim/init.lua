@@ -1,6 +1,6 @@
 vim.opt.termguicolors = true
 vim.opt.title = true
-vim.cmd.colorscheme("habamax")
+vim.cmd.colorscheme("sorbet")
 
 local function set_transparent()
 	local groups = {
@@ -213,6 +213,9 @@ setup_dynamic_statusline()
 -- ============================================================================
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
+
+vim.keymap.set("i", "<A-BS>", "<C-w>", { desc = "Delete word backward" })
 
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
 
@@ -754,3 +757,8 @@ vim.keymap.set("t", "<Esc>", function()
 	end
 end, { noremap = true, silent = true, desc = "Close floating terminal" })
 
+-- ============================================================================
+-- COLOR-ADJUSTMENTS
+-- ============================================================================
+
+vim.api.nvim_set_hl(0, "@markup.raw.block.markdown", { fg = "#ff9e64", bold = true })

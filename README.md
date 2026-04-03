@@ -58,5 +58,10 @@ git clone https://github.com/raspberrypi/pico-sdk.git
 cd pico-sdk && git submodule update --init
 ```
 
+Install picotool separatly to avoid ckmake rebuilding it for every project: 
+```bash
+brew install picotool
+```
+
 If you don't need Pico support, remove the `PICO_SDK_PATH` export from `.zshrc` and skip the above.
 
