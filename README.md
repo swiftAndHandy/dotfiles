@@ -5,22 +5,25 @@ Personal configuration files for macOS (Apple M4).
 ## Contents
 
 | Path | Description |
-|------|-------------|
+| --- | --- |
 | `nvim/` | Neovim 0.12 config (LSP, Treesitter, FZF, Git) |
 | `kitty/` | Kitty terminal config |
+| `clangd/` | clangd config for ARM (Pico) and RISC-V (ESP32) |
 | `.zshrc` | Zsh config with dev function and completions |
 
 ## Dependencies
 
-```bash
+```
 brew install neovim fzf
 brew install rust
 cargo install --locked tree-sitter-cli
+brew install llvm  # native macOS clangd for embedded development
 ```
 
 LSP servers via Mason (`:Mason` in Neovim):
-- `clangd` — C/C++ (already via Xcode CLT)
-- `sourcekit` — Swift (already via Xcode CLT)
+
+- `clangd` — C/C++, configured via `~/Library/Preferences/clangd/config.yaml`
+- `sourcekit` — Swift (via Xcode CLT)
 - `ts_ls` — TypeScript/JavaScript
 - `pyright` — Python
 - `lua_ls` — Lua
@@ -28,44 +31,75 @@ LSP servers via Mason (`:Mason` in Neovim):
 
 ## Setup
 
-```bash
+```
 git clone https://github.com/swiftAndHandy/dotfiles.git ~/dotfiles
-
-mv ~/.config/nvim ~/dotfiles/nvim
-mv ~/.config/kitty ~/dotfiles/kitty
-mv ~/.zshrc ~/dotfiles/.zshrc
 
 ln -s ~/dotfiles/nvim ~/.config/nvim
 ln -s ~/dotfiles/kitty ~/.config/kitty
 ln -s ~/dotfiles/clangd ~/.config/clangd
 ln -s ~/dotfiles/.zshrc ~/.zshrc
+
+mkdir -p ~/Library/Preferences/clangd
+ln -sf ~/.config/clangd/config.yaml ~/Library/Preferences/clangd/config.yaml
 ```
 
 Add to `~/.zprofile`:
-```bash
+
+```
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-## Raspberry Pi Pico
+## Embedded Development
 
-The `.zshrc` includes `PICO_SDK_PATH` pointing to `~/pico/pico-sdk`. To set up the SDK:
+Projects live under `~/Documents/development/esp` and `~/Documents/development/pico`.
 
-```bash
+### ESP32-H2 (ESP-IDF)
+
+ESP-IDF is managed by EIM (Espressif Installation Manager) and installed to `~/.espressif`. Install once:
+
+```
+brew install libgcrypt glib pixman sdl2 libslirp cmake
+brew tap espressif/eim
+brew install eim
+eim install
+```
+
+Activate the environment per terminal session:
+
+```
+source ~/.espressif/tools/activate_idf_v6.0.sh
+```
+
+Add to `.zshrc` for convenience:
+
+```
+alias get_idf='source ~/.espressif/tools/activate_idf_v6.0.sh'
+```
+
+### Raspberry Pi Pico
+
+The `.zshrc` exports `PICO_SDK_PATH` pointing to `~/embedded/pico-sdk`. To set up the SDK:
+
+```
 brew install cmake gcc-arm-embedded
-mkdir ~/pico && cd ~/pico
+mkdir -p ~/embedded/ && cd ~/embedded/
 git clone https://github.com/raspberrypi/pico-sdk.git
 cd pico-sdk && git submodule update --init
-```
-
-Install `picotool separatly` to avoid `cmake` rebuilding it for every project: 
-
-```bash
 brew install picotool
 ```
-The `clangd/config.yaml` configures `clangd` to find Pico SDK headers automatically via the symlink above. No additional setup needed.
 
-If you don't need Pico support, remove the `PICO_SDK_PATH` export from `.zshrc` and skip the above.
+## clangd Configuration
 
+The `clangd/config.yaml` uses `PathMatch` to apply different settings per project:
 
+- `~/Documents/development/pico/.*` → ARM toolchain (Xcode CLT + ARM GNU)
+- `~/Documents/development/esp/.*` → RISC-V toolchain (ESP-IDF riscv32-esp-elf)
+
+Neovim uses the Homebrew clangd (`/opt/homebrew/opt/llvm/bin/clangd`) with `--query-driver` pointing to both ARM and RISC-V toolchains. A symlink is required because Homebrew clangd reads from a macOS-specific path:
+
+```
+mkdir -p ~/Library/Preferences/clangd
+ln -sf ~/.config/clangd/config.yaml ~/Library/Preferences/clangd/config.yaml
+```
