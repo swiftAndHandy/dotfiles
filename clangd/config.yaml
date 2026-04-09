@@ -1,0 +1,28 @@
+If:
+  PathMatch: /Users/veltens/Documents/development/pico/.*
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - --target=arm-none-eabi
+    - --sysroot=/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi
+    - -Ibuild/generated/pico_base
+    - -resource-dir=/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/lib/gcc/arm-none-eabi/15.2.1
+    - -isystem/Applications/ArmGNUToolchain/15.2.rel1/arm-none-eabi/arm-none-eabi/include
+  Remove:
+    - -mcpu=cortex-m0plus
+---
+If:
+  PathMatch: /Users/veltens/Documents/development/esp/.*
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - --sysroot=/Users/veltens/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/riscv32-esp-elf
+    - --target=riscv32-esp-elf
+    - -isystem/Users/veltens/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/picolibc/riscv32-esp-elf/sys-include
+  Remove:
+    - -fno-shrink-wrap
+    - -fstrict-volatile-bitfields
+    - -fno-tree-switch-conversion
+    - -fzero-init-padding-bits=all
+    - -fno-malloc-dce
+    - -specs=picolibc.specs

@@ -214,7 +214,7 @@ setup_dynamic_statusline()
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-
+vim.keymap.set("i", "<S-CR>", "<C-o>o", { desc = "New line below without breaking" })
 vim.keymap.set("i", "<A-BS>", "<C-w>", { desc = "Delete word backward" })
 
 vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
@@ -601,7 +601,16 @@ vim.lsp.config("lua_ls", {
 })
 vim.lsp.config("bashls", {})
 vim.lsp.config("ts_ls", {})    -- TypeScript/JavaScript/Angular (via tsconfig)
-vim.lsp.config("clangd", {})   -- C/C++, bereits via Xcode CLT
+-- vim.lsp.config("clangd", {})   -- C/C++, bereits via Xcode CLT
+vim.lsp.config("clangd", {
+  cmd = {
+    "/opt/homebrew/opt/llvm/bin/clangd",
+    "--query-driver=/Applications/ArmGNUToolchain/**,/opt/homebrew/bin/arm-none-eabi-gcc,/Users/veltens/.espressif/tools/riscv32-esp-elf/esp-15.2.0_20251204/riscv32-esp-elf/bin/riscv32-esp-elf-gcc",
+    "--background-index",
+    "--clang-tidy",
+  },
+  root_markers = { "compile_commands.json", "CMakeLists.txt", ".git" },
+})
 vim.lsp.config("sourcekit", {}) -- Swift, bereits via Xcode CLT
 vim.lsp.config("pyright", {})  -- Python/Django
 

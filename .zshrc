@@ -9,6 +9,8 @@ dev() {
     case "$1" in
         c)
             base="$base/c" ;;
+        esp)
+            base="$base/esp" ;;
         pico)
             base="$base/pico" ;;
         py)
@@ -17,7 +19,7 @@ dev() {
             base="$base/swift" ;;
         web)
             base="$base/web" ;;
-        *) 
+        *)
             echo "Unknown category"; return 1 ;;
     esac
 
@@ -25,7 +27,7 @@ dev() {
         base="$base/$2"
     fi
 
-    cd "$base" || return 
+    cd "$base" || return
     ls
 }
 
@@ -33,16 +35,17 @@ dev() {
 _dev() {
     local base=~/Documents/development
     local -a categories
-    categories=(c pico py swift web)
+    categories=(c esp pico py swift web)
 
     if (( CURRENT == 2 )); then
         _describe 'category' categories
         return
     fi
 
-    if (( CURRENT == 3 )); then 
-        case "$words[2]" in 
+    if (( CURRENT == 3 )); then
+        case "$words[2]" in
             c)    _files -W "$base/c" -/ ;;
+            esp) _files -W "$base/esp" -/ ;;
             pico) _files -W "$base/pico" -/ ;;
             py)    _files -W "$base/python" -/ ;;
             swift) _files -W "$base/swift" -/ ;;
@@ -54,5 +57,5 @@ _dev() {
 
 compdef _dev dev
 
-export PICO_SDK_PATH=$HOME/pico/pico-sdk
+export PICO_SDK_PATH=$HOME/embedded/pico-sdk
 export PATH="$HOME/.cargo/bin:$PATH"

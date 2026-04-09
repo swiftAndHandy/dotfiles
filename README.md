@@ -37,6 +37,7 @@ mv ~/.zshrc ~/dotfiles/.zshrc
 
 ln -s ~/dotfiles/nvim ~/.config/nvim
 ln -s ~/dotfiles/kitty ~/.config/kitty
+ln -s ~/dotfiles/clangd ~/.config/clangd
 ln -s ~/dotfiles/.zshrc ~/.zshrc
 ```
 
@@ -58,10 +59,13 @@ git clone https://github.com/raspberrypi/pico-sdk.git
 cd pico-sdk && git submodule update --init
 ```
 
-Install picotool separatly to avoid ckmake rebuilding it for every project: 
+Install `picotool separatly` to avoid `cmake` rebuilding it for every project: 
+
 ```bash
 brew install picotool
 ```
+The `clangd/config.yaml` configures `clangd` to find Pico SDK headers automatically via the symlink above. No additional setup needed.
 
 If you don't need Pico support, remove the `PICO_SDK_PATH` export from `.zshrc` and skip the above.
+
 
