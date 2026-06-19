@@ -1,0 +1,5 @@
+text/html; w3m -dump -T text/html -o display_link_number=1 %s; copiousoutput
+image/jpeg; clear\; kitty +kitten icat --stdin=no %s; needsterminal
+image/png; clear\; kitty +kitten icat --stdin=no %s; needsterminal
+image/gif; clear\; kitty +kitten icat --stdin=no %s; needsterminal
+image/webp; clear\; kitty +kitten icat --stdin=no %s; needsterminal

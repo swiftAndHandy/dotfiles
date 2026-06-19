@@ -1,0 +1,41 @@
+# Account-Einstellungen Mailbox.org
+set realname = "Your Name"
+set from = "you@mail.org"
+set folder = "imaps://imap.mailbox.org:993"
+set imap_user = "you@mail.org"
+set smtp_url = "smtps://smtp.mailbox.org:465/"
+set smtp_user = "you@mail.org"
+set smtp_authenticators = "login"
+set spoolfile = "+INBOX"
+set postponed = "+Drafts"
+set trash = "+Trash"
+
+# Passwort sicher verschlüsselt laden (NICHT im Klartext in der Config)
+source "gpg --batch -q --decrypt ~/.config/neomutt/mailbox-org.gpg |"
+
+# SSL-Einstellungen
+set ssl_force_tls = yes
+set ssl_starttls = yes
+
+# GPG/PGP via GPGME
+set crypt_use_gpgme = yes
+set crypt_autosign = no
+set crypt_replyencrypt = yes
+set crypt_replysign = yes
+set crypt_verify_sig = yes
+
+# generate key with gpg --full-generate-key
+# find existing key with: gpg --list-secret-keys --keyid-format=long
+set pgp_default_key = "Your PGP Default Key"
+
+#MAILCAP
+set mailcap_path = "~/dotfiles/neomutt/mailcap"
+auto_view text/html
+
+#HEADER Cache
+set header_cache = "~/.cache/neomutt/headers"
+
+
+set imap_check_subscribed = yes
+set pager_stop = yes
+
